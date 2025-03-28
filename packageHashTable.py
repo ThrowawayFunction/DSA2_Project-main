@@ -1,4 +1,4 @@
-import package
+import packages
 
 
 
@@ -10,23 +10,23 @@ class PackageHashTable:
         self.size = 0 #size is how many items are stored in the hashtable. This can be useful for setting a value to automatically recalculate the hash table later.
         self.buckets = [None] * self.capacity
 
-    def insert(self, key, value):
+    def insert(self, key, package):
         # when something is added, size needs to be incremented
         self.size += 1    
         index = self.hash_function(key)
         # Go to the package corresponding to the hash
-        node = self.buckets[index]
+        package = self.buckets[index]
         # If bucket is empty, create a node, add it, and return it
-        if node is None:
-            self.buckets[index] = Node(key, value)
+        if package is None:
+            self.buckets[index] = PackageNode(key, package)
             return
         # If something already exists at the index, handle a collision by attaching it to the end of the linked list
-        prev = node
-        while node is not None:
-            prev = node
-            node = node.next
+        prev = package
+        while package is not None:
+            prev = package
+            package = package.next
         # Add a new node at the end of the list with provided key/value
-        prev.next = Node(key, value)
+        prev.next = PackageNode(key, package)
 
     def find(self, key):
         index = self.hash_function(key) #calculate hash
@@ -52,8 +52,8 @@ class PackageHashTable:
         return hash(key) % self.capacity #simple has function using python build in hash and the desired capacity
 
 # nodes are used to create a linked list in the event of a hash collision. the 'value' field will be used to store packages
-class Node():
-    def __init__(self, key, value):
+class PackageNode():
+    def __init__(self, key, package):
         self.key = key #the key value, necessary to be able to resolve hash collisions by verifying that we are returning the correct node in a bucket
-        self.value = value # the value itself. This will be package object
-        self.next = None # the next node in a bucket- only gets a value if there is a hash collision
+        self.package = package # the stored packaged itself
+        self.next = None # the next package node in a bucket- only gets a value if there is a hash collision

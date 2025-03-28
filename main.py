@@ -5,7 +5,7 @@
 import csv
 import datetime
 import packageHashTable
-import package
+import packages
 import truck
 
 
@@ -16,7 +16,7 @@ import truck
 def addresss(address):
     for row in AddressCSV:
         if address in row[2]:
-           return int(row[0])
+            return row[0]
 
 #uses the distance CSV to find distances between two addresses
 def distanceBetween(address1,address2):
@@ -51,41 +51,43 @@ def setupPackages(packageFile):
 
 # this is the important method that actually handles the decision making aspect of the program - input a Truck and it will use the greedy algo to find the next stop and deliver
 def DeliverPackages(truck):
-
-    #keep a list of packages
-    undelivered = [] 
-
-    #copy packages assigned to truck into the underway table
-    for packageID in truck.packages:
-        package = packageTable.find(packageID)
-        undelivered.append(package)
-
-    truck.packages.clear() #remove the pakages from the truck's assignment table, they are stored elsewhere now
-
-
     #while there are still packagaes in the undelivered list, keep going 
-    while len(undelivered) > 0:
-        nextAddress = 0 # just a default value for the next address, gets overwritten right away
-        nextPackage = None # another default value
 
-        for package in undelivered: # for each package which is not delivered           
-            if package.ID in [25, 6]: # 
+    beingDelivered = [] # make a new array to keep track of which packages are being delivered
+
+    # find the package in the package hash table and add it to the 'beingDelivered' array
+    for packageID in truck.packages:
+        package = packageHashTable.find(packageID)
+        beingDelivered.append(package)
+
+    while len(beingDelivered) > 0:
+        nextAddress = 0
+        nextPackage = None
+        #for go through each package that needs to be delivered. Calculate the next address
+        for package in beingDelivered: 
+            if package.ID in [25, 6]:
                 nextPackage = package
-                nextAddress = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
+                nextAddy = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
                 break
-
-            if distanceBetween(addresss(truck.currentLocation), addresss(package.street)) <= nextAddress:
-                nextAddress = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
+            if distanceBetween(addresss(truck.currentLocation), addresss(package.street)) <= nextAddy:
+                nextAddy = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
                 nextPackage = package
-
-
         truck.packages.append(nextPackage.ID)    
-        undelivered.remove(nextPackage)
-        truck.miles += nextAddress
+        beingDelivered.remove(nextPackage)
+        truck.miles += nextAddy
         truck.currentLocation = nextPackage.street
-        truck.time += datetime.timedelta(hours=nextAddress / 18)
+        truck.time += datetime.timedelta(hours=nextAddy / 18)
         nextPackage.deliveryTime = truck.time
         nextPackage.departureTime = truck.departTime
+
+
+
+        
+            
+
+
+
+
 
 ################### end method definitions ###################
 
