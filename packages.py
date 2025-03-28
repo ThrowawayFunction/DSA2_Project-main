@@ -6,7 +6,7 @@ import datetime
 
 class Package():
 
-    def __init__(self, ID, street, city, state, zip, deadline, weight, notes, status, departureTime, deliveryTime):
+    def __init__(self, ID, street, city, state, zip, deadline, weight, notes, status, departTime, deliverTime):
         self.id = ID
         self.street = street
         self.city = city
@@ -16,22 +16,22 @@ class Package():
         self.weight = weight
         self.notes = notes
         self.status = status
-        self.departureTime = None # these aren't known until a truck leaves
-        self.deliveryTime = None  # so we just set them as null for now
+        self.departTime = None # these aren't known until a truck leaves
+        self.deliverTime = None  # so we just set them as null for now
 
 
     # print out all the details of the package in a formatted string. similar to overriding C# ToString() method
     def __str__(self):
-        return "ID: %s, %-20s, %s, %s,%s, Deadline: %s,%s,%s,Departed At: %s, Delivered At: %s" % (self.id, self.street, self.city, self.state, self.zip, self.deadline, self.weight, self.status, self.departureTime, self.deliveryTime)
+        return "ID: %s, %-20s, %s, %s,%s, Deadline: %s,%s,%s,Departed At: %s, Delivered At: %s" % (self.id, self.street, self.city, self.state, self.zip, self.deadline, self.weight, self.status, self.departTime, self.deliverTime)
     
 
     # determines where a package is what time and prints it to the console - also handles the mid-morning address change
     def setStatus(self, time):
-        if self.deliveryTime == None:
+        if self.deliverTime == None:
             self.status = "At Hub"
-        elif time < self.deliveryTime:
+        elif time < self.deliverTime:
             self.status = "On its way!"
-        elif time <= self.departureTime:
+        elif time <= self.departTime:
             self.status = "At Hub"
         else:
             self.status = "Delivered!"

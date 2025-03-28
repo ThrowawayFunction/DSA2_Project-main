@@ -1,6 +1,7 @@
 # Student ID: 003325660
 # Lucas Endres
 # C950 - DSA2
+# All of the CSV files are in utf-8 encoding, other encodings might not work correctly
 
 import csv
 import datetime
@@ -16,7 +17,7 @@ packageTable = packageHashTable.PackageHashTable()
 ################### method definitions ###################
 
 # uses the address CSV to find the minimum distance 
-def addresss(address):
+def getDistance(address):
     for row in AddressCSV:
         if address in row[2]:
             return int(row[0])
@@ -35,7 +36,7 @@ def setupPackages(packageFile):
     with open(packageFile) as packagesFile:
         packagesData = csv.reader(packagesFile, delimiter = ",") #read the CSV values from the packageFile parameter, create a list
         next (packagesData)
-        for p in packagesData: # loop over each package (p) in the list and assign values from the csv- status, departure time, and delivery time are not yes assigned here
+        for p in packagesData: # loop over each package (p) in the list and assign values from the csv- status, depart time, and deliver time are not yes assigned here
             packageId = int(p[0]) #cast the string value as an int to ensure proper hashing
             packageStreet = p[1]
             packageCity = p[2]
@@ -45,18 +46,18 @@ def setupPackages(packageFile):
             packageWeight = p[6]
             packageNotes = p[7]
             packageStatus = "At Hub"
-            packageDepartureTime = None
-            packageDeliveryTime = None
+            packagedepartTime = None
+            packagedeliverTime = None
 
             #create a new package using the data in the list
-            x = packages.Package(packageId, packageStreet, packageCity, packageState, packageZip, packageDeadline, packageWeight, packageNotes, packageStatus, packageDepartureTime, packageDeliveryTime)
+            x = packages.Package(packageId, packageStreet, packageCity, packageState, packageZip, packageDeadline, packageWeight, packageNotes, packageStatus, packagedepartTime, packagedeliverTime)
             packageTable.insert(packageId, x)
 
 # this is the important method that actually handles the decision making aspect of the program - input a Truck and it will use the greedy algo to find the next stop and deliver
 def DeliverPackages(truck, packageTable):
 
 
-    beingDelivered = [] # make a new array to keep track of which packages are being delivered
+    beingDelivered = [] # make a new array to keep track of which packages are being delivered - this makes it way easier to summarize results later
 
     # find the package in the package hash table and add it to the 'beingDelivered' array
     for assignedPackageID in truck.packageIDList:
@@ -65,34 +66,25 @@ def DeliverPackages(truck, packageTable):
 
     #while there are still packagaes in the undelivered list, keep going 
     while len(beingDelivered) > 0:
-        nextAddress = 2000
+        nextAddress = 2000 #
         nextPackage = None
         #for go through each package in the being delivered array. 
         for package in beingDelivered: 
-            if package.id in [25, 6]: #QUINN - this is throwing an error, it should be a package object here, which will have an ID attribute. 
+            if package.id in [25, 6]: # set special instructions for package 25 and package 6
                 nextPackage = package 
-                nextAddress = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
+                nextAddress = distanceBetween(getDistance(truck.currentLocation), getDistance(package.street))
                 break
-            if distanceBetween(addresss(truck.currentLocation), addresss(package.street)) <= nextAddress:
-                nextAddress = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
+            if distanceBetween(getDistance(truck.currentLocation), getDistance(package.street)) <= nextAddress:
+                nextAddress = distanceBetween(getDistance(truck.currentLocation), getDistance(package.street))
                 nextPackage = package
         truck.packageIDList.append(nextPackage.id)    
         beingDelivered.remove(nextPackage)
         truck.miles += nextAddress
         truck.currentLocation = nextPackage.street
         truck.time += datetime.timedelta(hours=nextAddress / 18)
-        nextPackage.deliveryTime = truck.time
-        nextPackage.departureTime = truck.departTime
-
-
-
-        
+        nextPackage.deliverTime = truck.time
+        nextPackage.departTime = truck.departTime 
             
-
-
-
-
-
 ################### end method definitions ###################
 
 
@@ -114,7 +106,7 @@ with open("CSV/distance.csv") as distanceCSV:
 # call the function to actually load data from the csv files into the package table
 setupPackages('CSV/package.csv')
 
-# create threee trucks and give them the departure times specified and some packages
+# create threee trucks and give them the depart times specified and some packages- packages are in ascending order
 truck1 = truck.Truck(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=8),[1,13,14,15,16,19,20,27,29,30,31,34,37,40])
 truck2 = truck.Truck(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=11),[2,3,4,5,9,18,26,28,32,35,36,38]) # all of the delayed packages or packages with notes go on truck 2- it's going to leave after truck 1 or 3 are done
 truck3 = truck.Truck(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=9, minutes=5),[6,7,8,10,11,12,17,21,22,23,24,25,33,39]) 
