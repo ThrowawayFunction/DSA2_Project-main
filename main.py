@@ -28,6 +28,7 @@ def distanceBetween(address1,address2):
 
 # method to setup each of the packages and assign the default status
 def setupPackages(packageFile):
+    packageTable = packageHashTable.PackageHashTable()
     with open(packageFile) as packagesFile:
         packagesData = csv.reader(packagesFile, delimiter = ",") #read the CSV values from the packageFile parameter, create a list
         next (packagesData)
@@ -48,9 +49,10 @@ def setupPackages(packageFile):
             x = packages.Package(packageId, packageStreet, packageCity, packageState, packageZip, packageDeadline, packageWeight, packageNotes, packageStatus, packageDepartureTime, packageDeliveryTime)
             packageTable.insert(packageId, x)
 
+    return packageTable #return the package table once it's setup
 
 # this is the important method that actually handles the decision making aspect of the program - input a Truck and it will use the greedy algo to find the next stop and deliver
-def DeliverPackages(truck):
+def DeliverPackages(truck, packageTable):
 
 
     beingDelivered = [] # make a new array to keep track of which packages are being delivered
@@ -67,7 +69,7 @@ def DeliverPackages(truck):
         #for go through each package in the being delivered array. 
         for package in beingDelivered: 
             if package.ID in [25, 6]: #QUINN - this is throwing an error, it should be a package object here, which will have an ID attribute. 
-                nextPackage = package
+                nextPackage = package 
                 nextAddy = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
                 break
             if distanceBetween(addresss(truck.currentLocation), addresss(package.street)) <= nextAddy:
@@ -108,10 +110,10 @@ with open("CSV/distance.csv") as distanceCSV:
     DistanceCSV = list(dcsv)
 
 # define the table to put all the packages in
-packageTable = packageHashTable.PackageHashTable()
+packageTable = setupPackages('CSV/package.csv')
 
 # call the function to actually load data from the csv files into the package table
-setupPackages('CSV/package.csv')
+
 
 # create threee trucks and give them the departure times specified and some packages
 truck1 = truck.Truck(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=8),[1,13,14,15,16,19,20,27,29,30,31,34,37,40])
@@ -121,13 +123,13 @@ truck3 = truck.Truck(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=9,
 
 
 # tell two of the trucks to leave - 1 and 3 leave because 2 has a bunch of packages with special notes. This means it can also wait for the late packages
-DeliverPackages(truck1)
-DeliverPackages(truck3)
+DeliverPackages(truck1, packageTable)
+DeliverPackages(truck3, packageTable)
 
 
 # make sure only two trucks are out at a time. There are only two drivers
 truck2.departTime = min(truck1.time, truck3.time) # truck 2 leaves when 1 or 3 are done. This ensures that late packages are covered
-DeliverPackages(truck2)
+DeliverPackages(truck2, packageTable)
 
 
 print("Western Governors University Parcel Service")

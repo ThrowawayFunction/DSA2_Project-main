@@ -1,59 +1,37 @@
 import packages
 
 
+## code source: https://medium.com/@aleksej.gudkov/implementing-a-hash-table-in-python-a-step-by-step-guide-a7ef0f231d3c
+## the hash table shown in the article is heavily adapted to this task
 
-#Create a hash table class -- source: https://stephenagrice.medium.com/how-to-implement-a-hash-table-in-python-1eb6c55019fd
-# the hash table code from the source was adapted for this scenario
 class PackageHashTable:
-    def __init__(self):
-        self.capacity = 40 #capacity is set to 40 since there are 40 packages. capacity is the maximum number of buckets
-        self.size = 0 #size is how many items are stored in the hashtable. This can be useful for setting a value to automatically recalculate the hash table later.
-        self.buckets = [None] * self.capacity
 
-    def insert(self, key, package):
-        # when something is added, size needs to be incremented
-        self.size += 1    
-        index = self.hash_function(key)
-        # Go to the package corresponding to the hash
-        package = self.buckets[index]
-        # If bucket is empty, create a node, add it, and return it
-        if package is None:
-            self.buckets[index] = PackageNode(key, package)
-            return
-        # If something already exists at the index, handle a collision by attaching it to the end of the linked list
-        prev = package
-        while package is not None:
-            prev = package
-            package = package.next
-        # Add a new node at the end of the list with provided key/value
-        prev.next = PackageNode(key, package)
+    def __init__(self, size=40): # make the default size 40
+        self.size = size
+        self.table = [[] for _ in range(size)] #initialize the table witha bunch of empty arrays to support chaining
 
-    def find(self, key):
-        index = self.hash_function(key) #calculate hash
-        node = self.buckets[index] #check the bucket at the index
-        while node is not None and node.key != key: #if the node's key doesn't match, traverse the linked list to find the correct one
-            node = node.next
-        if node is None: #return null if none of the nodes match
-            return None
-        else:
-            return node.value #return the value of the node with matching key
-        
-     #this functions pretty much the same as find, but it just deletes the node if it finds it   
-    def remove(self, key):
-        bucket = hash(key) % len(self.table) 
-        bucket_list = self.table[bucket]
-        #removes the item if it is present
-        if key in bucket_list:
-            bucket_list.remove(key)   
-        self.size -= 1; # decrease in size
+    def packageHash(self, packageID): #this is the hash function, it's based on the size of the table and uses modulus to calcualte where an package should go by hashing the package ID
+            return hash(packageID) % self.size
     
-
-    def hash_function(self, key):
-        return hash(key) % self.capacity #simple has function using python build in hash and the desired capacity
-
-# nodes are used to create a linked list in the event of a hash collision. the 'value' field will be used to store packages
-class PackageNode():
-    def __init__(self, key, package):
-        self.key = key #the key value, necessary to be able to resolve hash collisions by verifying that we are returning the correct node in a bucket
-        self.package = package # the stored packaged itself
-        self.next = None # the next package node in a bucket- only gets a value if there is a hash collision
+    def insert(self, packageID, inputPackage): #hashes the package's ID to determine which bucket to put it 
+        bucket = self.packageHash(packageID)
+        for package in self.table[bucket]:
+            if package[0] == packageID:
+                package[1] = inputPackage
+                return
+        self.table[bucket].append([packageID, inputPackage])
+        
+    def find(self, packageID):
+        bucket = self.packageHash(packageID)
+        for package in self.table[bucket]:
+            if package[0] == packageID:
+                return package[1]
+        return None
+    
+    def delete(self, packageID):
+        bucket = self.packageHash(packageID)
+        for i, package in enumerate(self.table[bucket]):
+            if package[0] == packageID:
+                del self.table[bucket][i]
+                return
+        print("Package not found")
