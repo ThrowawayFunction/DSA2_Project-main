@@ -56,7 +56,6 @@ def setupPackages(packageFile):
 # this is the important method that actually handles the decision making aspect of the program - input a Truck and it will use the greedy algo to find the next stop and deliver
 def DeliverPackages(truck, packageTable):
 
-
     beingDelivered = [] # make a new array to keep track of which packages are being delivered - this makes it way easier to summarize results later
 
     # find the package in the package hash table and add it to the 'beingDelivered' array
@@ -103,12 +102,12 @@ with open("CSV/distance.csv") as distanceCSV:
     DistanceCSV = list(dcsv)
 
 
-# call the function to actually load data from the csv files into the package table
+# call the function to actually load data from the csv files into the package table 
 setupPackages('CSV/package.csv')
 
 # create threee trucks and give them the depart times specified and some packages- packages are in ascending order
 truck1 = truck.Truck(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=8),[1,13,14,15,16,19,20,27,29,30,31,34,37,40])
-truck2 = truck.Truck(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=11),[2,3,4,5,9,18,26,28,32,35,36,38]) # all of the delayed packages or packages with notes go on truck 2- it's going to leave after truck 1 or 3 are done
+truck2 = truck.Truck(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=11),[2,3,4,5,9,18,26,28,32,35,36,38]) # all of the delayed packages or packages with notes go on truck 2- it's going to leave after truck 1 or 3 are done. Truck 2 leaves at 11 to ensure it gets all the late packages, as well as the corrected address
 truck3 = truck.Truck(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=9, minutes=5),[6,7,8,10,11,12,17,21,22,23,24,25,33,39]) 
 
 

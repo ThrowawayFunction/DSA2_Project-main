@@ -13,13 +13,15 @@ class PackageHashTable:
     def packageHash(self, packageID): #this is the hash function, it's based on the size of the table and uses modulus to calcualte where an package should go by hashing the package ID
             return hash(packageID) % self.size
         
-    def insert(self, packageID, inputPackage): #hashes the package's ID to determine which bucket to put it 
+    def insert(self, packageID, inputPackage): #hashes the package's ID to determine which bucket to put it, also edits existing packages if needed
         bucket = self.packageHash(packageID)
         for value in self.table[bucket]:
             if value[0] == packageID:
                 value[1] = inputPackage
                 return
         self.table[bucket].append([packageID, inputPackage])
+
+
         
     def find(self, packageID):
         bucket = self.packageHash(packageID)
