@@ -45,7 +45,7 @@ def setupPackages(packageFile):
             packageDeliveryTime = None
 
             #create a new package using the data in the list
-            x = package.Package(packageId, packageStreet, packageCity, packageState, packageZip, packageDeadline, packageWeight, packageNotes, packageStatus, packageDepartureTime, packageDeliveryTime)
+            x = packages.Package(packageId, packageStreet, packageCity, packageState, packageZip, packageDeadline, packageWeight, packageNotes, packageStatus, packageDepartureTime, packageDeliveryTime)
             packageTable.insert(packageId, x)
 
 
@@ -57,7 +57,7 @@ def DeliverPackages(truck):
 
     # find the package in the package hash table and add it to the 'beingDelivered' array
     for packageID in truck.packages:
-        package = packageHashTable.find(packageID)
+        package = packageTable.find(packageID)
         beingDelivered.append(package)
 
     while len(beingDelivered) > 0:
@@ -65,7 +65,7 @@ def DeliverPackages(truck):
         nextPackage = None
         #for go through each package that needs to be delivered. Calculate the next address
         for package in beingDelivered: 
-            if package.ID in [25, 6]:
+            if package in [25, 6]:
                 nextPackage = package
                 nextAddy = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
                 break

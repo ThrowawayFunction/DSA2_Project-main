@@ -1,5 +1,5 @@
 
-import package
+import packages
 
 # class used to define the properties of trucks
 # for ease of namespace, most logic is defined directly in main.py
