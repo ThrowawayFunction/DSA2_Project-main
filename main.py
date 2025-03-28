@@ -9,6 +9,9 @@ import packages
 import truck
 
 
+# define the table to put all the packages in
+packageTable = packageHashTable.PackageHashTable()
+
 
 ################### method definitions ###################
 
@@ -27,13 +30,13 @@ def distanceBetween(address1,address2):
 
 
 # method to setup each of the packages and assign the default status
-def setupPackages(packageFile, packageTable):
+def setupPackages(packageFile):
 
     with open(packageFile) as packagesFile:
         packagesData = csv.reader(packagesFile, delimiter = ",") #read the CSV values from the packageFile parameter, create a list
         next (packagesData)
         for p in packagesData: # loop over each package (p) in the list and assign values from the csv- status, departure time, and delivery time are not yes assigned here
-            packageId = p[0] #cast the string value as an int
+            packageId = int(p[0]) #cast the string value as an int to ensure proper hashing
             packageStreet = p[1]
             packageCity = p[2]
             packageState = p[3]
@@ -49,8 +52,6 @@ def setupPackages(packageFile, packageTable):
             x = packages.Package(packageId, packageStreet, packageCity, packageState, packageZip, packageDeadline, packageWeight, packageNotes, packageStatus, packageDepartureTime, packageDeliveryTime)
             packageTable.insert(packageId, x)
 
-    return packageTable #return the package table once it's setup
-
 # this is the important method that actually handles the decision making aspect of the program - input a Truck and it will use the greedy algo to find the next stop and deliver
 def DeliverPackages(truck, packageTable):
 
@@ -59,8 +60,8 @@ def DeliverPackages(truck, packageTable):
 
     # find the package in the package hash table and add it to the 'beingDelivered' array
     for assignedPackageID in truck.packageIDList:
-        package = packageTable.find(assignedPackageID)
-        beingDelivered.append(package)
+        packageInTruck: packages.Package = packageTable.find(assignedPackageID)
+        beingDelivered.append(packageInTruck)
 
     #while there are still packagaes in the undelivered list, keep going 
     while len(beingDelivered) > 0:
@@ -68,7 +69,7 @@ def DeliverPackages(truck, packageTable):
         nextPackage = None
         #for go through each package in the being delivered array. 
         for package in beingDelivered: 
-            if package.ID in [25, 6]: #QUINN - this is throwing an error, it should be a package object here, which will have an ID attribute. 
+            if package.id in [25, 6]: #QUINN - this is throwing an error, it should be a package object here, which will have an ID attribute. 
                 nextPackage = package 
                 nextAddy = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
                 break
@@ -110,11 +111,8 @@ with open("CSV/distance.csv") as distanceCSV:
     DistanceCSV = list(dcsv)
 
 
-# define the table to put all the packages in
-packageTable = packageHashTable.PackageHashTable()
-
 # call the function to actually load data from the csv files into the package table
-setupPackages('CSV/package.csv', packageTable)
+setupPackages('CSV/package.csv')
 
 # create threee trucks and give them the departure times specified and some packages
 truck1 = truck.Truck(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=8),[1,13,14,15,16,19,20,27,29,30,31,34,37,40])
