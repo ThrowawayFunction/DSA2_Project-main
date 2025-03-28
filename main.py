@@ -53,7 +53,7 @@ def setupPackages(packageFile):
 def DeliverPackages(truck):
 
     #keep a list of packages
-    undelivered: Package = [] 
+    undelivered = [] 
 
     #copy packages assigned to truck into the underway table
     for packageID in truck.packages:
@@ -65,7 +65,7 @@ def DeliverPackages(truck):
 
     #while there are still packagaes in the undelivered list, keep going 
     while len(undelivered) > 0:
-        nextAddress = 2000 # just a default value for the next address, gets overwritten right away
+        nextAddress = 0 # just a default value for the next address, gets overwritten right away
         nextPackage = None # another default value
         for package in undelivered: # for each package which is not delivered
            
