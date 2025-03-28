@@ -4,7 +4,8 @@
 
 import datetime
 
-class Package:
+class Package():
+
     def __init__(self, ID, street, city, state, zip, deadline, weight, notes, status, departureTime = None, deliveryTime = None):
         self.ID = ID
         self.street = street
@@ -20,7 +21,7 @@ class Package:
 
 
     # print out all the details of the package in a formatted string. similar to overriding C# ToString() method
-    def _str_(self):
+    def __str__(self):
         return "ID: %s, %-20s, %s, %s,%s, Deadline: %s,%s,%s,Departure Time: %s,Delivery Time: %s" % (self.ID, self.street, self.city, self.state, self.zip, self.deadline, self.weight, self.status, self.departureTime, self.deliveryTime)
     
 

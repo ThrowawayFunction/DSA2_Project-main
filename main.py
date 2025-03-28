@@ -9,6 +9,7 @@ import package
 import truck
 
 
+
 ################### method definitions ###################
 
 # uses the address CSV to find the minimum distance 
@@ -31,7 +32,7 @@ def setupPackages(packageFile):
         packagesData = csv.reader(packagesFile, delimiter = ",") #read the CSV values from the packageFile parameter, create a list
         next (packagesData)
         for p in packagesData: # loop over each package (p) in the list and assign values from the csv- status, departure time, and delivery time are not yes assigned here
-            packageId = int(p[0]) #cast the string value as an int
+            packageId = p[0] #cast the string value as an int
             packageStreet = p[1]
             packageCity = p[2]
             packageState = p[3]
@@ -52,11 +53,11 @@ def setupPackages(packageFile):
 def DeliverPackages(truck):
 
     #keep a list of packages
-    undelivered = []
+    undelivered: Package = [] 
 
     #copy packages assigned to truck into the underway table
     for packageID in truck.packages:
-        package = packageTable.search(packageID)
+        package = packageTable.find(packageID)
         undelivered.append(package)
 
     truck.packages.clear() #remove the pakages from the truck's assignment table, they are stored elsewhere now
@@ -64,7 +65,7 @@ def DeliverPackages(truck):
 
     #while there are still packagaes in the undelivered list, keep going 
     while len(undelivered) > 0:
-        nextAddress = 0 # just a default value for the next address, gets overwritten right away
+        nextAddress = 2000 # just a default value for the next address, gets overwritten right away
         nextPackage = None # another default value
         for package in undelivered: # for each package which is not delivered
            

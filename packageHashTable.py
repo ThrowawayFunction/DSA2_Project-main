@@ -13,7 +13,7 @@ class PackageHashTable:
     def insert(self, key, value):
         # when something is added, size needs to be incremented
         self.size += 1    
-        index = self.hash(key)
+        index = self.hash_function(key)
         # Go to the package corresponding to the hash
         node = self.buckets[index]
         # If bucket is empty, create a node, add it, and return it
@@ -52,7 +52,7 @@ class PackageHashTable:
         return hash(key) % self.capacity #simple has function using python build in hash and the desired capacity
 
 # nodes are used to create a linked list in the event of a hash collision. the 'value' field will be used to store packages
-class Node:
+class Node():
     def __init__(self, key, value):
         self.key = key #the key value, necessary to be able to resolve hash collisions by verifying that we are returning the correct node in a bucket
         self.value = value # the value itself. This will be package object

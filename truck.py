@@ -1,8 +1,10 @@
 
+import package
+
 # class used to define the properties of trucks
 # for ease of namespace, most logic is defined directly in main.py
 
-class Truck:
+class Truck():
     def __init__(self, speed, miles, currentLocation, departTime, packages):
         self.speed = speed
         self.miles = miles
