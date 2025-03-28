@@ -51,7 +51,7 @@ def setupPackages(packageFile):
 
 # this is the important method that actually handles the decision making aspect of the program - input a Truck and it will use the greedy algo to find the next stop and deliver
 def DeliverPackages(truck):
-    #while there are still packagaes in the undelivered list, keep going 
+
 
     beingDelivered = [] # make a new array to keep track of which packages are being delivered
 
@@ -60,12 +60,13 @@ def DeliverPackages(truck):
         package = packageTable.find(assignedPackageID)
         beingDelivered.append(package)
 
+    #while there are still packagaes in the undelivered list, keep going 
     while len(beingDelivered) > 0:
         nextAddress = 0
         nextPackage = None
-        #for go through each package that needs to be delivered. Calculate the next address
+        #for go through each package in the being delivered array. 
         for package in beingDelivered: 
-            if package.ID in [25, 6]:
+            if package.ID in [25, 6]: #QUINN - this is throwing an error, it should be a package object here, which will have an ID attribute. 
                 nextPackage = package
                 nextAddy = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
                 break
