@@ -67,8 +67,8 @@ def DeliverPackages(truck):
     while len(undelivered) > 0:
         nextAddress = 0 # just a default value for the next address, gets overwritten right away
         nextPackage = None # another default value
-        for package in undelivered: # for each package which is not delivered
-           
+
+        for package in undelivered: # for each package which is not delivered           
             if package.ID in [25, 6]: # 
                 nextPackage = package
                 nextAddress = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
@@ -130,7 +130,7 @@ DeliverPackages(truck2)
 print("Western Governors University Parcel Service")
 
 #total miles for all of the trucks
-print ("Truck Total Miles:", (truck1.miles + truck2.miles + truck3.miles))
+print("Truck Total Miles:", (truck1.miles + truck2.miles + truck3.miles))
 
 while True:    
     ## allow a user to put in a time value - error handling is not implemented here so please use a real time in 24 hour format in HH:MM
