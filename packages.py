@@ -22,12 +22,12 @@ class Package():
 
     # print out all the details of the package in a formatted string. similar to overriding C# ToString() method
     def __str__(self):
-        return "ID: %s, %-20s, %s, %s,%s, Deadline: %s,%s,%s,Departed At: %s, Delivered At: %s" % (self.ID, self.street, self.city, self.state, self.zip, self.deadline, self.weight, self.status, self.departureTime, self.deliveryTime)
+        return "ID: %s, %-20s, %s, %s,%s, Deadline: %s,%s,%s,Departed At: %s, Delivered At: %s" % (self.id, self.street, self.city, self.state, self.zip, self.deadline, self.weight, self.status, self.departureTime, self.deliveryTime)
     
 
     # determines where a package is what time and prints it to the console - also handles the mid-morning address change
-    def updateStatus(self, time):
-        if self.time == None:
+    def setStatus(self, time):
+        if self.deliveryTime == None:
             self.status = "At Hub"
         elif time < self.deliveryTime:
             self.status = "On its way!"

@@ -65,7 +65,7 @@ def DeliverPackages(truck, packageTable):
 
     #while there are still packagaes in the undelivered list, keep going 
     while len(beingDelivered) > 0:
-        nextAddress = 0
+        nextAddress = 2000
         nextPackage = None
         #for go through each package in the being delivered array. 
         for package in beingDelivered: 
@@ -76,7 +76,7 @@ def DeliverPackages(truck, packageTable):
             if distanceBetween(addresss(truck.currentLocation), addresss(package.street)) <= nextAddress:
                 nextAddress = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
                 nextPackage = package
-        truck.packageIDList.append(nextPackage.ID)    
+        truck.packageIDList.append(nextPackage.id)    
         beingDelivered.remove(nextPackage)
         truck.miles += nextAddress
         truck.currentLocation = nextPackage.street
@@ -139,13 +139,14 @@ print("Truck Total Miles:", (truck1.miles + truck2.miles + truck3.miles))
 while True:    
     ## allow a user to put in a time value - error handling is not implemented here so please use a real time in 24 hour format in HH:MM
     userTime = input("Please enter a time in 24 hour format like HH:MM   Input: ")
+
     (h, m) = userTime.split(":")
     timeChange = datetime.timedelta(hours=int(h), minutes=int(m))
     try: ## allow a user to check the status of one pacakge by ID or all packages 
-        singleEntry = [int(input("Enter a package ID (integer value from 1 to 40, inclusive) to see the status of a package. Enter no value and return to see all package status.  Input: "))]
+        singleEntry = [int(input("Enter a package ID (integer value from 1 to 40, inclusive) to see the status of a package. Press enter without typing anything to see all package statuses.  Input: "))]
     except ValueError:
         singleEntry =  range(1, 41)
     for packageID in singleEntry:
-        package = packageTable.search(packageID)
-        package.statusUpdate(timeChange)
+        package = packageTable.find(packageID)
+        package.setStatus(timeChange)
         print(str(package))  
