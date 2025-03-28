@@ -5,8 +5,8 @@
 import datetime
 
 class Package:
-    def _init_(self, Id, street, city, state, zip, deadline, weight, notes, status, departureTime = None, deliveryTime = None):
-        self.Id = Id
+    def __init__(self, ID, street, city, state, zip, deadline, weight, notes, status, departureTime = None, deliveryTime = None):
+        self.ID = ID
         self.street = street
         self.city = city
         self.state = state
@@ -21,7 +21,7 @@ class Package:
 
     # print out all the details of the package in a formatted string. similar to overriding C# ToString() method
     def _str_(self):
-        return "Id: %s, %-20s, %s, %s,%s, Deadline: %s,%s,%s,Departure Time: %s,Delivery Time: %s" % (self.ID, self.street, self.city, self.state, self.zip, self.deadline, self.weight, self.status, self.departureTime, self.deliveryTime)
+        return "ID: %s, %-20s, %s, %s,%s, Deadline: %s,%s,%s,Departure Time: %s,Delivery Time: %s" % (self.ID, self.street, self.city, self.state, self.zip, self.deadline, self.weight, self.status, self.departureTime, self.deliveryTime)
     
 
     # determines where a package is what time and prints it to the console - also handles the mid-morning address change

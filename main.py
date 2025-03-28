@@ -44,7 +44,7 @@ def setupPackages(packageFile):
             packageDeliveryTime = None
 
             #create a new package using the data in the list
-            x = package.Package._init_(packageId, packageStreet, packageCity, packageState, packageZip, packageDeadline, packageWeight, packageNotes, packageStatus, packageDepartureTime, packageDeliveryTime)
+            x = package.Package(packageId, packageStreet, packageCity, packageState, packageZip, packageDeadline, packageWeight, packageNotes, packageStatus, packageDepartureTime, packageDeliveryTime)
             packageTable.insert(packageId, x)
 
 

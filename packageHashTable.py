@@ -6,8 +6,8 @@ import package
 # the hash table code from the source was adapted for this scenario
 class PackageHashTable:
     def __init__(self):
-        self.capacity = 40 #capacity is set to 40 since there are 40 packages
-        self.size = 0
+        self.capacity = 40 #capacity is set to 40 since there are 40 packages. capacity is the maximum number of buckets
+        self.size = 0 #size is how many items are stored in the hashtable. This can be useful for setting a value to automatically recalculate the hash table later.
         self.buckets = [None] * self.capacity
 
     def insert(self, key, value):
@@ -29,7 +29,7 @@ class PackageHashTable:
         prev.next = Node(key, value)
 
     def find(self, key):
-        index = self.hash(key) #calculate hash
+        index = self.hash_function(key) #calculate hash
         node = self.buckets[index] #check the bucket at the index
         while node is not None and node.key != key: #if the node's key doesn't match, traverse the linked list to find the correct one
             node = node.next
@@ -44,7 +44,12 @@ class PackageHashTable:
         bucket_list = self.table[bucket]
         #removes the item if it is present
         if key in bucket_list:
-            bucket_list.remove(key)    
+            bucket_list.remove(key)   
+        self.size -= 1; # decrease in size
+    
+
+    def hash_function(self, key):
+        return hash(key) % self.capacity #simple has function using python build in hash and the desired capacity
 
 # nodes are used to create a linked list in the event of a hash collision. the 'value' field will be used to store packages
 class Node:
