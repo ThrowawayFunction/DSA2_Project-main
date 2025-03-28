@@ -19,14 +19,14 @@ packageTable = packageHashTable.PackageHashTable()
 def addresss(address):
     for row in AddressCSV:
         if address in row[2]:
-            return row[0]
+            return int(row[0])
 
 #uses the distance CSV to find distances between two addresses
 def distanceBetween(address1,address2):
     distance = DistanceCSV[address1][address2]
     if distance == '':
         distance = DistanceCSV[address2][address1]
-    return float(distance)
+    return float(distance) #convert the string value to a decimal
 
 
 # method to setup each of the packages and assign the default status
@@ -71,16 +71,16 @@ def DeliverPackages(truck, packageTable):
         for package in beingDelivered: 
             if package.id in [25, 6]: #QUINN - this is throwing an error, it should be a package object here, which will have an ID attribute. 
                 nextPackage = package 
-                nextAddy = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
+                nextAddress = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
                 break
-            if distanceBetween(addresss(truck.currentLocation), addresss(package.street)) <= nextAddy:
-                nextAddy = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
+            if distanceBetween(addresss(truck.currentLocation), addresss(package.street)) <= nextAddress:
+                nextAddress = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
                 nextPackage = package
         truck.packageIDList.append(nextPackage.ID)    
         beingDelivered.remove(nextPackage)
-        truck.miles += nextAddy
+        truck.miles += nextAddress
         truck.currentLocation = nextPackage.street
-        truck.time += datetime.timedelta(hours=nextAddy / 18)
+        truck.time += datetime.timedelta(hours=nextAddress / 18)
         nextPackage.deliveryTime = truck.time
         nextPackage.departureTime = truck.departTime
 
