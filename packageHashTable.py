@@ -20,10 +20,8 @@ class PackageHashTable:
                 value[1] = inputPackage
                 return
         self.table[bucket].append([packageID, inputPackage])
-
-
         
-    def find(self, packageID):
+    def find(self, packageID): #recalculates the bucket by hashing the packageID, and looks to see if a package with a matching ID is in the list at the bucket. If there isn't a matching package, it returns None
         bucket = self.packageHash(packageID)
         for value in self.table[bucket]:
             if value[0] == packageID:
