@@ -56,8 +56,8 @@ def DeliverPackages(truck):
     beingDelivered = [] # make a new array to keep track of which packages are being delivered
 
     # find the package in the package hash table and add it to the 'beingDelivered' array
-    for packageID in truck.packages:
-        package = packageTable.find(packageID)
+    for assignedPackageID in truck.packageIDList:
+        package = packageTable.find(assignedPackageID)
         beingDelivered.append(package)
 
     while len(beingDelivered) > 0:
@@ -65,14 +65,14 @@ def DeliverPackages(truck):
         nextPackage = None
         #for go through each package that needs to be delivered. Calculate the next address
         for package in beingDelivered: 
-            if package in [25, 6]:
+            if package.ID in [25, 6]:
                 nextPackage = package
                 nextAddy = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
                 break
             if distanceBetween(addresss(truck.currentLocation), addresss(package.street)) <= nextAddy:
                 nextAddy = distanceBetween(addresss(truck.currentLocation), addresss(package.street))
                 nextPackage = package
-        truck.packages.append(nextPackage.ID)    
+        truck.packageIDList.append(nextPackage.ID)    
         beingDelivered.remove(nextPackage)
         truck.miles += nextAddy
         truck.currentLocation = nextPackage.street
