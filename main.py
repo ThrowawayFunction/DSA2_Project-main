@@ -66,24 +66,24 @@ def DeliverPackages(truck, packageTable):
 
     #while there are still packagaes in the undelivered list, keep going 
     while len(beingDelivered) > 0:
-        nextAddress = 2000 #
-        nextPackage = None
+        nextAddress = 9999 # set an abitrarily high number for this value, since each distance will be compared to it
+        nextPackage = None # this is the default cursor for nextPackage
         #for go through each package in the being delivered array. 
-        for package in beingDelivered: 
-            if package.id in [25, 6]: # set special instructions for package 25 and package 6
+        for package in beingDelivered: #iterate over each package that needs delivered
+            if package.id in [6, 25, 27, 32]: # set special instructions for package 6, 25, 27, or 32
                 nextPackage = package 
-                nextAddress = distanceBetween(getDistance(truck.currentLocation), getDistance(package.street))
+                nextAddress = distanceBetween(getDistance(truck.currentLocation), getDistance(package.street)) #calculate the distance to the next package
                 break
-            if distanceBetween(getDistance(truck.currentLocation), getDistance(package.street)) <= nextAddress:
+            if distanceBetween(getDistance(truck.currentLocation), getDistance(package.street)) <= nextAddress: #if the value is less than nextAddress, set that as next address and calucalte the next one again
                 nextAddress = distanceBetween(getDistance(truck.currentLocation), getDistance(package.street))
                 nextPackage = package
-        truck.packageIDList.append(nextPackage.id)    
-        beingDelivered.remove(nextPackage)
-        truck.miles += nextAddress
-        truck.currentLocation = nextPackage.street
-        truck.time += datetime.timedelta(hours=nextAddress / 18)
-        nextPackage.deliverTime = truck.time
-        nextPackage.departTime = truck.departTime 
+        truck.packageIDList.append(nextPackage.id)   #add nextPackage to the truck's package list 
+        beingDelivered.remove(nextPackage)           #remove it from the beingDelieved list
+        truck.miles += nextAddress                   #add the distance traveled to the truck's total distance traveled
+        truck.currentLocation = nextPackage.street   #update the truck's location based on the travling it just did 
+        truck.time += datetime.timedelta(hours=nextAddress / 18) # change the truck's time value based on the 18mph speed described in the task assignment
+        nextPackage.deliverTime = truck.time # set the delivery time of the package to the time we just calculated
+        nextPackage.departTime = truck.departTime # set the departure time for the package to the departure time of the truck
             
 ################### end method definitions ###################
 

@@ -36,7 +36,7 @@ class Package():
         else:
             self.status = "Delivered!"
         if self.id == 9:  # we know that address 9 is going to change ahead of time, so special rules apply here 
-            if time <= datetime.timedelta(hours = 10, minutes = 20): #check when the package is being referenced, before or after 10:20 AM, and assign the address accordingly
+            if time <= datetime.timedelta(hours = 10, minutes = 20): #check when the package is being referenced, before or after 10:20, and assign the address accordingly
                 self.street = "410 S State St"
                 self.zip = "84111"
             else:
