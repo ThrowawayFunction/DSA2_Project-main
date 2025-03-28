@@ -7,7 +7,7 @@ import datetime
 class Package():
 
     def __init__(self, ID, street, city, state, zip, deadline, weight, notes, status, departureTime, deliveryTime):
-        self.ID = ID
+        self.id = ID
         self.street = street
         self.city = city
         self.state = state

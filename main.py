@@ -27,8 +27,8 @@ def distanceBetween(address1,address2):
 
 
 # method to setup each of the packages and assign the default status
-def setupPackages(packageFile):
-    packageTable = packageHashTable.PackageHashTable()
+def setupPackages(packageFile, packageTable):
+
     with open(packageFile) as packagesFile:
         packagesData = csv.reader(packagesFile, delimiter = ",") #read the CSV values from the packageFile parameter, create a list
         next (packagesData)
@@ -109,11 +109,12 @@ with open("CSV/distance.csv") as distanceCSV:
     dcsv = csv.reader(distanceCSV)
     DistanceCSV = list(dcsv)
 
+
 # define the table to put all the packages in
-packageTable = setupPackages('CSV/package.csv')
+packageTable = packageHashTable.PackageHashTable()
 
 # call the function to actually load data from the csv files into the package table
-
+setupPackages('CSV/package.csv', packageTable)
 
 # create threee trucks and give them the departure times specified and some packages
 truck1 = truck.Truck(18, 0.0, "4001 South 700 East", datetime.timedelta(hours=8),[1,13,14,15,16,19,20,27,29,30,31,34,37,40])
